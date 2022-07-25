@@ -1,4 +1,8 @@
-arr = [['_', '_', '_'], ['_', '_', '_'], [' ', ' ', ' ']]
+arr = [
+    ['_', '_', '_'],
+    ['_', '_', '_'],
+    [' ', ' ', ' ']
+]
 
 side = 'x'
 
@@ -16,14 +20,8 @@ def move(pos_x, pos_y):
     global side
     global move_count
     if arr[pos_x][pos_y] not in ['x', 'o']:
-        try:
-            arr[pos_x][pos_y] = side
-            display()
-            if win():
-                print(f'side {side} wins')
-
-        except:
-            print('invalid move')
+        arr[pos_x][pos_y] = side
+        display()
 
         if side == 'x':
             side = 'o'
@@ -34,7 +32,7 @@ def move(pos_x, pos_y):
         print('invalid move')
 
 
-def win():
+def win(x, y):
     wins = [
         [[0, 0], [0, 1], [0, 2]],
         [[1, 0], [1, 1], [1, 2]],
@@ -47,15 +45,27 @@ def win():
     ]
 
     for i in wins:
-        if arr[i[0][0]][i[0][1]] == side and arr[i[1][0]][i[1][1]] == side and arr[i[2][0]][i[2][1]] == side:
+        if arr[i[0][0]][i[0][1]] == arr[i[1][0]][i[1][1]] == arr[i[2][0]][i[2][1]] == 'x' or arr[i[0][0]][i[0][1]] == arr[i[1][0]][i[1][1]] == arr[i[2][0]][i[2][1]] == 'y':
             return True
-        else:
-            return False
+    return False
 
 
-while move_count != 9:
-    pos = input()
+display()
+
+while True:
+    pos = input() 
+    if len(pos) != 2:
+        continue
     pos_x = ord(pos[0].lower()) - 97
     pos_y = int(pos[1]) - 1
-    move(pos_x, pos_y)
-    pass
+    try:
+        move(pos_x, pos_y)
+        if win(pos_x, pos_y):
+            print(f'side {side} wins')
+            break
+        elif move_count == 9:
+            print('its a tie')
+            break
+    except:
+        print('invalid move')
+exit()
